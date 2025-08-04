@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Дашбоард</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Improved responsive styles */
+    @media (max-width: 767px) {
+  .sidebar-toggle { display: block; }
+  #sidebar { 
+    position: fixed; 
+    top: 0; 
+    left: -100%; 
+    width: 80%; 
+    max-width: 300px;
+    height: 100vh;
+    z-index: 1000;
+    transition: left 0.3s ease;
+    background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #1e293b 100%);
+  }
+  #sidebar.active {
+    left: 0;
+  }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+  #sidebar.active + .sidebar-overlay {
+    display: block;
+  }
+  .fixed-header {
+    height: 70px;
+  }
+  .main-content-padding {
+    padding-top: 70px;
+  }
+  
+  /* Шинээр нэмэгдсэн стиль - гар утасны цэсний бичвэрийн харагдах байдал */
+  #sidebar nav button {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  #sidebar nav button i {
+    font-size: 18px;
+    width: 24px;
+  }
+  #sidebar nav button span {
+    display: inline-block;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+    /* Improved toggle switch */
+    .toggle-switch {
+      cursor: pointer;
+      width: 50px;
+      height: 24px;
+      background-color: #4b5563;
+      border-radius: 9999px;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+    .toggle-switch.dark::after {
+      transform: translateX(26px);
+    }
+    .toggle-switch.dark {
+      background-color: #2563eb;
+    }
+
+    /* Smooth transitions */
+    .transition-all {
+      transition: all 0.3s ease;
+    }
+
+    /* Card hover effects */
+    .card-hover {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Scrollbar styling */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-track {
+      background: #374151;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #6b7280;
+    }
+
+    /* Chart text color for dark mode */
+    .chartjs-render-monitor text {
+      fill: currentColor !important;
+    }
+    
+    /* Sidebar gradient */
+    .sidebar-gradient {
+      background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 50%, #1e293b 100%);
+    }
+    .dark .sidebar-gradient {
+      background: linear-gradient(180deg, #111827 0%, #1f2937 50%, #0f172a 100%);
+    }
+    
+    /* Loading animation */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    /* Page title styling */
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: inherit;
+    }
+  </style>
+</head>
+<body class="flex flex-col md:flex-row transition-colors duration-300 bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-white">
+  <!-- Mobile Sidebar Overlay -->
+  <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- Fixed Header - Made taller -->
+  <header class="fixed-header fixed top-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-md flex items-center justify-between px-6 py-4 z-50">
+    <!-- Mobile menu button -->
+    <button onclick="toggleSidebar()" class="sidebar-toggle md:hidden text-gray-700 dark:text-gray-200 focus:outline-none text-2xl">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Larger header title -->
+    <h2 class="text-2xl font-bold ml-2 md:ml-0">Дашбоард</h2>
+    
+    <!-- Theme toggle -->
+    <div class="flex items-center">
+      <div id="themeToggleFixed" class="toggle-switch" onclick="toggleDarkMode()"></div>
+      <span class="text-sm hidden md:block dark:text-gray-300 text-gray-600 ml-2">
+        <span id="themeText">Харанхуй</span> горим
+      </span>
+    </div>
+  </header>
+
+  <!-- Sidebar - Removed the title -->
+  <aside id="sidebar" class="w-full md:w-64 md:h-screen p-0 sidebar-gradient shadow-xl hidden md:flex flex-col">
+    <div class="flex items-center justify-center h-16 border-b border-blue-900 dark:border-gray-800">
+      <!-- Empty div - Title removed -->
+    </div>
+    <nav class="flex-1 py-6 px-2 space-y-2 overflow-y-auto custom-scrollbar">
+      <button onclick="loadModule('home')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-home w-5 text-center opacity-80"></i>
+        <span>Нүүр</span>
+      </button>
+      <button onclick="loadModule('projects')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-project-diagram w-5 text-center opacity-80"></i>
+        <span>Төслүүд</span>
+      </button>
+      <button onclick="loadModule('contracts')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-file-contract w-5 text-center opacity-80"></i>
+        <span>Гэрээ</span>
+      </button>
+      <button onclick="loadModule('payments')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-money-bill-wave w-5 text-center opacity-80"></i>
+        <span>Төлбөр</span>
+      </button>
+      <button onclick="loadModule('building')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-building w-5 text-center opacity-80"></i>
+        <span>Барилга</span>
+      </button>
+      <button onclick="loadModule('land')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-map-marked-alt w-5 text-center opacity-80"></i>
+        <span>Газар</span>
+      </button>
+      <button onclick="loadModule('apartment')" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-white dark:text-gray-100 hover:bg-blue-800 dark:hover:bg-gray-800 transition-all">
+        <i class="fas fa-home w-5 text-center opacity-80"></i>
+        <span>Орон сууц</span>
+      </button>
+    </nav>
+    
+    <!-- Sidebar footer -->
+    <div class="p-4 border-t border-blue-900 dark:border-gray-800 text-white text-sm">
+      <div class="flex items-center justify-between">
+        <span>v1.0.0</span>
+        <span id="current-date" class="text-gray-300"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="mainContent" class="flex-1 p-4 md:p-6 main-content-padding overflow-x-hidden">
+    <!-- Content will be loaded here dynamically -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6">
+      <!-- Placeholder for dynamic content -->
+      <div class="text-center py-10">
+        <div class="animate-pulse">
+          <i class="fas fa-spinner fa-spin text-4xl text-blue-500 dark:text-blue-400"></i>
+          <p class="mt-4 text-gray-500 dark:text-gray-400">Ачааллаж байна...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Store chart instances for theme updates
+    const chartInstances = new Map();
+    
+    // Current module name for title display
+    let currentModule = 'home';
+    const moduleTitles = {
+      'home': 'Нүүр хуудас ',
+      'projects': 'Төслүүд',
+      'contracts': 'Гэрээ',
+      'payments': 'Төлбөр',
+      'building': 'Барилга',
+      'land': 'Газар',
+      'apartment': 'Орон сууц'
+    };
+
+    // Improved sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('hidden');
+      sidebar.classList.toggle('active');
+      
+      // Add overflow hidden to body when sidebar is open
+      document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    }
+
+    // Check for saved theme preference or use system preference
+    function getThemePreference() {
+      if (localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Set theme based on preference
+    function setTheme(theme) {
+      const html = document.documentElement;
+      const isDark = theme === 'dark';
+      
+      html.classList.toggle('dark', isDark);
+      
+      // Update toggle switch
+      document.querySelectorAll('.toggle-switch').forEach(el => {
+        el.classList.toggle('dark', isDark);
+      });
+      
+      // Update theme text
+      document.getElementById('themeText').textContent = isDark ? 'Гэрэлтүүлэх' : 'Харанхуй';
+      
+      // Save to localStorage
+      localStorage.setItem('theme', theme);
+      
+      // Update charts
+      updateChartsTheme();
+    }
+
+    // Toggle between dark and light mode
+    function toggleDarkMode() {
+      setTheme(getThemePreference() === 'dark' ? 'light' : 'dark');
+    }
+
+    // Update charts theme when theme changes
+    function updateChartsTheme() {
+      const isDark = getThemePreference() === 'dark';
+      const textColor = isDark ? '#fff' : '#374151';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+      
+      chartInstances.forEach((chart, id) => {
+        if (chart.options) {
+          // Update scales if they exist
+          if (chart.options.scales) {
+            ['x', 'y'].forEach(axis => {
+              if (chart.options.scales[axis]) {
+                chart.options.scales[axis].ticks.color = textColor;
+                chart.options.scales[axis].grid.color = gridColor;
+              }
+            });
+          }
+          
+          // Update legend if it exists
+          if (chart.options.plugins?.legend?.labels) {
+            chart.options.plugins.legend.labels.color = textColor;
+          }
+          
+          chart.update();
+        }
+      });
+    }
+
+    // Load module function with improved loading state
+    async function loadModule(name) {
+      const mainContent = document.getElementById('mainContent');
+      currentModule = name;
+      
+      // Show loading state
+      mainContent.innerHTML = `
+        <div class="text-center py-10">
+          <div class="animate-pulse">
+            <i class="fas fa-spinner fa-spin text-4xl text-blue-500 dark:text-blue-400"></i>
+            <p class="mt-4 text-gray-500 dark:text-gray-400">Ачааллаж байна...</p>
+          </div>
+        </div>
+      `;
+      
+      // Update header title
+      document.querySelector('header h2').innerHTML = `
+      <img src="images/logo.png" alt="Лого" class="inline-block w-17 h-12 mr-2 align-middle" />
+      ${moduleTitles[name] || 'Дашбоард'}
+`     ;
+      
+      // Close sidebar on mobile
+      if (window.innerWidth < 768) {
+        toggleSidebar();
+      }
+      
+      try {
+        // Simulate network delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        const response = await fetch(`modules/${name}.html`);
+        if (!response.ok) throw new Error('Module not found');
+        
+        const html = await response.text();
+        
+        // Wrap the loaded content with a container and add title
+        mainContent.innerHTML = `
+          <div class="fade-in">
+            <h1 class="page-title">${moduleTitles[name]}</h1>
+            ${html}
+          </div>
+        `;
+        
+        // Initialize appropriate chart based on module name
+        setTimeout(() => {
+          // Clear previous charts
+          chartInstances.forEach(chart => chart.destroy());
+          chartInstances.clear();
+          
+          if (name === 'home') initChart();
+          if (name === 'projects') initProjectsChart();
+          if (name === 'payments') initPaymentsChart();
+          if (name === 'building') initBuildingChart();
+          if (name === 'land') initLandChart();
+          if (name === 'contracts') initContractsChart();
+          if (name === 'apartment') initApartmentChart();
+        }, 100);
+      } catch (err) {
+        mainContent.innerHTML = `
+          <div class="text-center py-10 text-red-500 dark:text-red-400">
+            <i class="fas fa-exclamation-triangle text-4xl"></i>
+            <p class="mt-4">Алдаа гарлаа: ${err.message}</p>
+            <button onclick="loadModule('home')" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-all">
+              Нүүр хуудас руу буцах
+            </button>
+          </div>
+        `;
+        mainContent.classList.add('fade-in');
+      }
+    }
+
+    // Helper function for chart options
+    function getChartOptions(yAxisTitle = '', max100 = false) {
+      const isDark = getThemePreference() === 'dark';
+      const textColor = isDark ? '#fff' : '#374151';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+      
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+          legend: { 
+            position: 'top',
+            labels: { 
+              color: textColor,
+              font: {
+                family: 'system-ui, -apple-system, sans-serif'
+              }
+            } 
+          },
+          tooltip: {
+            enabled: true,
+            mode: 'index',
+            intersect: false,
+            backgroundColor: isDark ? '#1f2937' : '#fff',
+            titleColor: textColor,
+            bodyColor: textColor,
+            borderColor: isDark ? '#4b5563' : '#e5e7eb',
+            borderWidth: 1
+          }
+        },
+        scales: { 
+          x: { 
+            ticks: { 
+              color: textColor,
+              font: {
+                family: 'system-ui, -apple-system, sans-serif'
+              }
+            },
+            grid: {
+              color: gridColor,
+              drawBorder: false
+            }
+          }, 
+          y: { 
+            ticks: { 
+              color: textColor,
+              font: {
+                family: 'system-ui, -apple-system, sans-serif'
+              }
+            },
+            grid: {
+              color: gridColor,
+              drawBorder: false
+            },
+            beginAtZero: true,
+            max: max100 ? 100 : undefined,
+            title: {
+              display: !!yAxisTitle,
+              text: yAxisTitle,
+              color: textColor,
+              font: {
+                weight: 'bold'
+              }
+            }
+          } 
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false
+        }
+      };
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set initial theme
+      setTheme(getThemePreference());
+      
+      // Set current date
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('current-date').textContent = now.toLocaleDateString('mn-MN', options);
+      
+      // Load home module
+      loadModule('home');
+      
+      // Watch for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (!localStorage.getItem('theme')) { // Only if user hasn't set preference
+          setTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    });
+
+    // Chart initialization functions
+    function initChart() {
+      const ctx = document.querySelector('canvas')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['1-р сар', '2-р сар', '3-р сар', '4-р сар', '5-р сар', '6-р сар'],
+          datasets: [{
+            label: 'Орлого',
+            data: [120, 190, 150, 200, 180, 220],
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59,130,246,0.2)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#3B82F6',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }, {
+            label: 'Зарлага',
+            data: [80, 120, 100, 130, 110, 140],
+            borderColor: '#EF4444',
+            backgroundColor: 'rgba(239,68,68,0.2)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#EF4444',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: getChartOptions('Мөнгөн дүн (сая ₮)')
+      });
+      
+      chartInstances.set('mainChart', chart);
+    }
+
+    function initProjectsChart() {
+      const barCtx = document.getElementById('projectBarChart')?.getContext('2d');
+      const lineCtx = document.getElementById('projectLineChart')?.getContext('2d');
+      if (!barCtx || !lineCtx) return;
+
+      const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+          labels: ['River Garden', 'Green Valley', 'Eco House', 'Renewal', 'GHDT-1', 'New Settlement'],
+          datasets: [{
+            label: 'Гэрээний тоо',
+            data: [12, 19, 8, 15, 12, 10],
+            backgroundColor: '#6366F1',
+            borderRadius: 4,
+            borderWidth: 0,
+            hoverBackgroundColor: '#4f46e5'
+          }]
+        },
+        options: getChartOptions('Гэрээний тоо')
+      });
+      
+      const lineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: {
+          labels: ['1-р сар', '2-р сар', '3-р сар', '4-р сар', '5-р сар', '6-р сар'],
+          datasets: [{
+            label: 'Гүйцэтгэл (%)',
+            data: [25, 35, 45, 55, 65, 75],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16,185,129,0.1)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#10B981',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: getChartOptions('Гүйцэтгэл (%)', true)
+      });
+      
+      chartInstances.set('projectsBarChart', barChart);
+      chartInstances.set('projectsLineChart', lineChart);
+    }
+
+    function initPaymentsChart() {
+      const ctx = document.getElementById('paymentsChart')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Төлсөн', 'Төлөгдөөгүй', 'Хугацаа хэтэрсэн'],
+          datasets: [{
+            data: [75, 15, 10],
+            backgroundColor: [
+              '#10B981',
+              '#F59E0B',
+              '#EF4444'
+            ],
+            borderWidth: 0,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: getThemePreference() === 'dark' ? '#fff' : '#374151',
+                font: {
+                  family: 'system-ui, -apple-system, sans-serif'
+                },
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.label}: ${context.raw}%`;
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      chartInstances.set('paymentsChart', chart);
+    }
+
+    function initBuildingChart() {
+      const ctx = document.getElementById('buildingChart')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Шинэ барилга', 'Хуучин барилга', 'Засаж байгаа', 'Төлөвлөгдөж байгаа'],
+          datasets: [{
+            label: 'Барилгын тоо',
+            data: [15, 8, 12, 5],
+            backgroundColor: '#3B82F6',
+            borderRadius: 4,
+            borderWidth: 0,
+            hoverBackgroundColor: '#2563eb'
+          }]
+        },
+        options: getChartOptions('Барилгын тоо')
+      });
+      
+      chartInstances.set('buildingChart', chart);
+    }
+
+    function initLandChart() {
+      const ctx = document.getElementById('landChart')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Ашиглалтад орсон', 'Худалдаанд гарсан', 'Чөлөөтэй', 'Зөвшөөрөл хүлээж буй'],
+          datasets: [{
+            data: [45, 25, 15, 15],
+            backgroundColor: [
+              '#3B82F6',
+              '#10B981',
+              '#F59E0B',
+              '#6366F1'
+            ],
+            borderWidth: 0,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: getThemePreference() === 'dark' ? '#fff' : '#374151',
+                font: {
+                  family: 'system-ui, -apple-system, sans-serif'
+                },
+                padding: 20,
+                usePointStyle: true,
+                pointStyle: 'circle'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.label}: ${context.raw}%`;
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      chartInstances.set('landChart', chart);
+    }
+
+    function initContractsChart() {
+      const ctx = document.getElementById('contractsChart')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['1-р сар', '2-р сар', '3-р сар', '4-р сар', '5-р сар', '6-р сар'],
+          datasets: [{
+            label: 'Гэрээний тоо',
+            data: [5, 8, 12, 15, 18, 22],
+            borderColor: '#3B82F6',
+            backgroundColor: 'rgba(59,130,246,0.2)',
+            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#3B82F6',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: getChartOptions('Гэрээний тоо')
+      });
+      
+      chartInstances.set('contractsChart', chart);
+    }
+
+    function initApartmentChart() {
+      const ctx = document.getElementById('apartmentChart')?.getContext('2d');
+      if (!ctx) return;
+      
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['1-р байр', '2-р байр', '3-р байр', '4-р байр', '5-р байр'],
+          datasets: [{
+            label: 'Орон сууцны тоо',
+            data: [25, 30, 35, 20, 15],
+            backgroundColor: '#6366F1',
+            borderRadius: 4,
+            borderWidth: 0,
+            hoverBackgroundColor: '#4f46e5'
+          }]
+        },
+        options: getChartOptions('Орон сууцны тоо')
+      });
+      
+      chartInstances.set('apartmentChart', chart);
+    }
+  </script>
+</body>
+</html>

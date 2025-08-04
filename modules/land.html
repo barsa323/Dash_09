@@ -1,0 +1,201 @@
+<section class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+        <span class="inline-flex items-center justify-center rounded-full bg-green-600 text-white w-10 h-10 text-2xl shadow">
+          <i class="fas fa-map-marked-alt"></i>
+        </span>
+        Газрын мэдээлэл
+      </h1>
+      <p class="text-gray-500 dark:text-gray-300">Газрын эзэмшлийн бүртгэл</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm flex items-center gap-2 transition-all">
+        <i class="fas fa-plus"></i>
+        Шинэ газар
+      </button>
+      <button class="p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-all">
+        <i class="fas fa-filter"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Нийт газар</p>
+          <p class="text-2xl font-bold">36</p>
+        </div>
+        <div class="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
+          <i class="fas fa-map-marked text-blue-600 dark:text-blue-300"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Нийт талбай</p>
+          <p class="text-2xl font-bold">185,000 м²</p>
+        </div>
+        <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+          <i class="fas fa-ruler-combined text-green-600 dark:text-green-300"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Эзэмшлийн газар</p>
+          <p class="text-2xl font-bold">110,000 м²</p>
+        </div>
+        <div class="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
+          <i class="fas fa-landmark text-yellow-600 dark:text-yellow-300"></i>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow card-hover">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Түрээсийн газар</p>
+          <p class="text-2xl font-bold">75,000 м²</p>
+        </div>
+        <div class="p-3 bg-red-100 dark:bg-red-900 rounded-lg">
+          <i class="fas fa-file-signature text-red-600 dark:text-red-300"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Land Table -->
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow overflow-hidden">
+    <div class="overflow-x-auto custom-scrollbar">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
+          <tr>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Газрын ID</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Байршил</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Талбай (м²)</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Хэлбэр</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Төлөв</th>
+            <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"></th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-all">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-blue-600 dark:text-blue-400">GZ001</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900 dark:text-white">ХУД, 11-р хороо</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900 dark:text-white">12,000</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">Эзэмшил</span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">Идэвхтэй</span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button class="text-blue-600 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300">
+                <i class="fas fa-ellipsis-v"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Бусад мөрүүд -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg card-hover">
+      <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <i class="fas fa-chart-pie text-blue-500"></i>
+        Газар эзэмшлийн хэлбэр
+      </h2>
+      <div class="relative h-64">
+        <canvas id="landPieChart"></canvas>
+      </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg card-hover">
+      <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
+        <i class="fas fa-chart-bar text-green-500"></i>
+        Дүүргээр газрын хэмжээ
+      </h2>
+      <div class="relative h-64">
+        <canvas id="landBarChart"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function initLandChart() {
+  const pieCtx = document.getElementById('landPieChart')?.getContext('2d');
+  const barCtx = document.getElementById('landBarChart')?.getContext('2d');
+  
+  if (!pieCtx || !barCtx) return;
+
+  // Pie Chart
+  new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Эзэмшил', 'Түрээс', 'Бусад'],
+      datasets: [{
+        data: [60, 35, 5],
+        backgroundColor: ['#10B981', '#F59E0B', '#6366F1'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#374151',
+            font: {
+              family: 'system-ui, -apple-system, sans-serif'
+            }
+          }
+        },
+        tooltip: {
+          enabled: true,
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.raw}%`;
+            }
+          }
+        }
+      },
+      cutout: '70%',
+      radius: '80%'
+    }
+  });
+
+  // Bar Chart
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: ['ХУД', 'БЗД', 'СХД', 'ЧД', 'БГД'],
+      datasets: [{
+        label: 'Талбай (м²)',
+        data: [32000, 28000, 22000, 15000, 18000],
+        backgroundColor: '#6366F1',
+        borderRadius: 4
+      }]
+    },
+    options: getChartOptions('Талбай (м²)')
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initLandChart();
+});
+</script>

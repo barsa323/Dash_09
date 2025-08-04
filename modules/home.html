@@ -1,0 +1,289 @@
+<section class="space-y-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+        <span class="inline-flex items-center justify-center rounded-full bg-blue-600 text-white w-10 h-10 text-2xl shadow">
+          <i class="fas fa-home"></i>
+        </span>
+        Хяналтын Самбар
+      </h1>
+      <p class="text-gray-500 dark:text-gray-300">Тавтай морилно уу! Доорх модулиудын гол мэдээлэл.</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-sm text-gray-500 dark:text-gray-400 hidden md:block">Сүүлд шинэчлэгдсэн:</span>
+      <span class="text-sm font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full">
+        <i class="fas fa-clock mr-1"></i> <span id="last-updated">Өнөөдөр</span>
+      </span>
+    </div>
+  </div>
+    
+  <!-- KPI Cards - Horizontal scroll on mobile -->
+  <div class="flex overflow-x-auto gap-4 pb-4 custom-scrollbar">
+    <div class="flex-shrink-0 bg-blue-600 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-project-diagram opacity-80"></i>
+        <span class="text-sm">Нийт төсөл</span>
+      </div>
+      <div class="text-2xl font-bold">6</div>
+      <div class="text-xs mt-1 opacity-80">Шинэ: River Garden 2</div>
+    </div>
+    <div class="flex-shrink-0 bg-green-500 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-file-contract opacity-80"></i>
+        <span class="text-sm">Нийт гэрээ</span>
+      </div>
+      <div class="text-2xl font-bold">75</div>
+      <div class="text-xs mt-1 opacity-80">Идэвхтэй: 45 | Дууссан: 20</div>
+    </div>
+    <div class="flex-shrink-0 bg-yellow-500 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-money-bill-wave opacity-80"></i>
+        <span class="text-sm">Нийт төлбөр</span>
+      </div>
+      <div class="text-2xl font-bold">₮ 1,240,000,000</div>
+      <div class="text-xs mt-1 opacity-80">Төлөгдсөн: ₮ 980,000,000</div>
+    </div>
+    <div class="flex-shrink-0 bg-red-500 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-home opacity-80"></i>
+        <span class="text-sm">Нийт сууц</span>
+      </div>
+      <div class="text-2xl font-bold">250</div>
+      <div class="text-xs mt-1 opacity-80">Борлуулсан: 180 | Түрээсийн: 20</div>
+    </div>
+    <div class="flex-shrink-0 bg-purple-500 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-building opacity-80"></i>
+        <span class="text-sm">Нийт барилга</span>
+      </div>
+      <div class="text-2xl font-bold">24</div>
+      <div class="text-xs mt-1 opacity-80">Баригдаж буй: 12</div>
+    </div>
+    <div class="flex-shrink-0 bg-pink-500 p-4 rounded-xl text-white shadow-lg w-56 hover:scale-[1.02] transition-all card-hover">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="fas fa-map-marked-alt opacity-80"></i>
+        <span class="text-sm">Нийт газар</span>
+      </div>
+      <div class="text-2xl font-bold">36</div>
+      <div class="text-xs mt-1 opacity-80">Талбай: 185,000 м²</div>
+    </div>
+  </div>
+
+  <!-- Charts Grid - Responsive layout -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+    <!-- Project Contracts Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-project-diagram opacity-80"></i>
+        Төслүүдийн гэрээний тоо
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="projectBarChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="projectLineChart"></canvas>
+      </div> -->
+    </div>
+    
+    <!-- Payment Schedule Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-money-bill-wave opacity-80"></i>
+        Төлбөрийн төлөвлөлт
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="paymentBarChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="paymentLineChart"></canvas>
+      </div> -->
+    </div>
+    
+    <!-- Building Progress Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-building opacity-80"></i>
+        Барилгын явц
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="buildingBarChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="buildingLineChart"></canvas>
+      </div> -->
+    </div>
+    
+    <!-- Land Ownership Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-map-marked-alt opacity-80"></i>
+        Газар эзэмшлийн хувь
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="landPieChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="landBarChart"></canvas>
+      </div> -->
+    </div>
+    
+    <!-- Contract Performance Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-file-contract opacity-80"></i>
+        Гэрээний гүйцэтгэл
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="contractBarChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="contractLineChart"></canvas>
+      </div> -->
+    </div>
+    
+    <!-- Apartment Types Chart -->
+    <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg flex flex-col card-hover">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <i class="fas fa-home opacity-80"></i>
+        Орон сууцны төрөл
+      </h2>
+      <div class="relative h-48 md:h-56">
+        <canvas id="apartmentPieChart"></canvas>
+      </div>
+      <!-- <div class="relative h-48 md:h-56 mt-4">
+        <canvas id="apartmentBarChart"></canvas>
+      </div> -->
+    </div>
+  </div>
+</section>
+
+<script>
+  // Set last updated time
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString('mn-MN', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  // Initialize charts with responsive options
+  function initChart() {
+    const ctx = document.querySelector('canvas')?.getContext('2d');
+    if (!ctx) return;
+    
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['1-р сар', '2-р сар', '3-р сар'],
+        datasets: [{
+          label: 'Орлого',
+          data: [100, 150, 90],
+          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(59,130,246,0.2)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: getChartOptions('Сарын орлого (сая ₮)')
+    });
+  }
+
+  function initProjectsChart() {
+    const barCanvas = document.getElementById('projectBarChart')?.getContext('2d');
+    const lineCanvas = document.getElementById('projectLineChart')?.getContext('2d');
+    if (!barCanvas || !lineCanvas) return;
+
+    new Chart(barCanvas, {
+      type: 'bar',
+      data: {
+        labels: ['River Garden', 'Green Valley', 'Eco House', 'Renewal', 'GHDT-1', 'New Settlement'],
+        datasets: [{
+          label: 'Төслийн харицуулалт',
+          data: [2, 3, 1, 2, 2, 2],
+          backgroundColor: '#60A5FA'
+        }]
+      },
+      options: getChartOptions('Гэрээний тоо')
+    });
+
+    new Chart(lineCanvas, {
+      type: 'line',
+      data: {
+        labels: ['1-р сар', '2-р сар', '3-р сар', '4-р сар', '5-р сар', '6-р сар'],
+        datasets: [{
+          label: 'Гүйцэтгэлийн өсөлт (%)',
+          data: [25, 35, 45, 55, 65, 75],
+          borderColor: '#34D399',
+          backgroundColor: 'rgba(52,211,153,0.2)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: getChartOptions('Гүйцэтгэл (%)', true)
+    });
+  }
+
+  // Helper function for chart options
+  function getChartOptions(yAxisTitle = '', max100 = false) {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { 
+        legend: { 
+          labels: { 
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#374151',
+            font: {
+              family: 'system-ui, -apple-system, sans-serif'
+            }
+          } 
+        },
+        tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false
+        }
+      },
+      scales: { 
+        x: { 
+          ticks: { 
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#374151',
+            font: {
+              family: 'system-ui, -apple-system, sans-serif'
+            }
+          },
+          grid: {
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+          }
+        }, 
+        y: { 
+          ticks: { 
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#374151',
+            font: {
+              family: 'system-ui, -apple-system, sans-serif'
+            }
+          },
+          grid: {
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'
+          },
+          beginAtZero: true,
+          max: max100 ? 100 : undefined,
+          title: {
+            display: !!yAxisTitle,
+            text: yAxisTitle,
+            color: window.matchMedia('(prefers-color-scheme: dark)').matches ? '#fff' : '#374151'
+          }
+        } 
+      },
+      interaction: {
+        mode: 'nearest',
+        axis: 'x',
+        intersect: false
+      }
+    };
+  }
+
+  // Initialize on load
+  document.addEventListener('DOMContentLoaded', function() {
+    initChart();
+    initProjectsChart();
+    // Other chart initializations...
+  });
+</script>
